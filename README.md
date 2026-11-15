@@ -1,5 +1,7 @@
 # Despliegue de Modelo de Machine Learning en la Nube - Actividad 3
 
+Este es mi proyecto para la Actividad 3 de Inteligencia Artificial I. En la actividad pasada trabajé con PCA y para esta entrega el profesor me reasignó el algoritmo **Naive Bayes**. Desarrollé un modelo para predecir si una persona puede tener diabetes según sus exámenes médicos y creé una aplicación web en Streamlit para ponerlo a funcionar en la nube.
+
 ---
 
 ## 1. Problema y Datos Reales
@@ -22,6 +24,7 @@ Me parece interesante este algoritmo porque es rápido de entrenar y funciona bi
 ---
 
 ## 3. Estructura del Repositorio
+El proyecto está organizado exactamente como pide la guía:
 
 ```text
 actividad3_naive_bayes/
@@ -49,7 +52,7 @@ actividad3_naive_bayes/
 │   └── app.py             # Aplicación web hecha con Streamlit
 │
 └── docs/
-    └── presentacion.pdf   # Presentación final para la sustentación
+    └── presentacion.pptx  # Presentación final para la sustentación (PowerPoint)
 ```
 
 ---
