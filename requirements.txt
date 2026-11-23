@@ -6,5 +6,4 @@ joblib
 matplotlib
 seaborn
 Pillow
-winocr
 reportlab
