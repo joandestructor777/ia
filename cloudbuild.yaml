@@ -1,0 +1,28 @@
+steps:
+  # 1. Construir la imagen Docker en Google Cloud
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/biomet-salud:$COMMIT_SHA', '.']
+
+  # 2. Subir la imagen a Container Registry de GCP
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/biomet-salud:$COMMIT_SHA']
+
+  # 3. Desplegar a Cloud Run de forma totalmente pública (24/7 sin caídas)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'biomet-salud'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/biomet-salud:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--port'
+      - '8080'
+
+images:
+  - 'gcr.io/$PROJECT_ID/biomet-salud:$COMMIT_SHA'

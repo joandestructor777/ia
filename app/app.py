@@ -996,10 +996,14 @@ def generar_reporte_pdf(datos_paciente, resultado_dict):
     color_borde = colors.HexColor('#F59E0B') if resultado_dict['alerta'] else colors.HexColor('#0D9488')
     titulo_resultado = "ATENCIÓN PREVENTIVA SUGERIDA" if resultado_dict['alerta'] else "RANGO FISIOLÓGICO FAVORABLE"
     
+    # Sanitizar orientaciones para cumplir la estricta sintaxis XML de ReportLab (<br/>)
+    orientacion_raw = str(resultado_dict.get('orientacion', ''))
+    orientacion_sanitizada = orientacion_raw.replace('<br>', '<br/>').replace('<BR>', '<br/>').replace('<br >', '<br/>')
+    
     dictamen_data = [
         [Paragraph(f"<b>CATEGORÍA:</b> {titulo_resultado}", body_style)],
         [Paragraph(f"<b>Probabilidad estimada por Naïve Bayes:</b> {resultado_dict['probabilidad']:.1f}%", body_style)],
-        [Paragraph(f"<b>Recomendaciones clínicas:</b><br/>{resultado_dict['orientacion']}", body_style)]
+        [Paragraph(f"<b>Recomendaciones clínicas:</b><br/>{orientacion_sanitizada}", body_style)]
     ]
     t_dict = Table(dictamen_data, colWidths=[520])
     t_dict.setStyle(TableStyle([
@@ -1380,12 +1384,12 @@ elif seccion_principal == "Tamizaje de Diabetes (IA Naïve Bayes)":
         prob_mostrada = prob_riesgo if es_alerta else prob_sano
         
         orientacion_texto = (
-            "• Consulta de Medicina Preventiva: Solicite cita de control general en su centro de salud para evaluación clínica integral.<br>"
-            "• Prueba complementaria recomendada: Se sugiere correlacionar los hallazgos con un examen de Hemoglobina Glicosilada (HbA1c).<br>"
+            "• Consulta de Medicina Preventiva: Solicite cita de control general en su centro de salud para evaluación clínica integral.<br/>"
+            "• Prueba complementaria recomendada: Se sugiere correlacionar los hallazgos con un examen de Hemoglobina Glicosilada (HbA1c).<br/>"
             "• Hábitos y nutrición: Los desbalances metabólicos tempranos son altamente reversibles con dieta consciente y actividad física."
             if es_alerta else
-            "• Mantenimiento preventivo: Conserve hábitos de alimentación saludable con moderación de carbohidratos refinados.<br>"
-            "• Actividad cardiovascular: Cumpla con al menos 150 minutos semanales de ejercicio recomendados por la OMS.<br>"
+            "• Mantenimiento preventivo: Conserve hábitos de alimentación saludable con moderación de carbohidratos refinados.<br/>"
+            "• Actividad cardiovascular: Cumpla con al menos 150 minutos semanales de ejercicio recomendados por la OMS.<br/>"
             "• Chequeo anual: Mantenga controles periódicos preventivos de laboratorio de rutina."
         )
 

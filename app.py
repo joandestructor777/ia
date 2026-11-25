@@ -996,10 +996,14 @@ def generar_reporte_pdf(datos_paciente, resultado_dict):
     color_borde = colors.HexColor('#F59E0B') if resultado_dict['alerta'] else colors.HexColor('#0D9488')
     titulo_resultado = "ATENCIÓN PREVENTIVA SUGERIDA" if resultado_dict['alerta'] else "RANGO FISIOLÓGICO FAVORABLE"
     
+    # Sanitizar orientaciones para cumplir la estricta sintaxis XML de ReportLab (<br/>)
+    orientacion_raw = str(resultado_dict.get('orientacion', ''))
+    orientacion_sanitizada = orientacion_raw.replace('<br>', '<br/>').replace('<BR>', '<br/>').replace('<br >', '<br/>')
+    
     dictamen_data = [
         [Paragraph(f"<b>CATEGORÍA:</b> {titulo_resultado}", body_style)],
         [Paragraph(f"<b>Probabilidad estimada por Naïve Bayes:</b> {resultado_dict['probabilidad']:.1f}%", body_style)],
-        [Paragraph(f"<b>Recomendaciones clínicas:</b><br/>{resultado_dict['orientacion']}", body_style)]
+        [Paragraph(f"<b>Recomendaciones clínicas:</b><br/>{orientacion_sanitizada}", body_style)]
     ]
     t_dict = Table(dictamen_data, colWidths=[520])
     t_dict.setStyle(TableStyle([
